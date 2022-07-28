@@ -7,10 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AssociationTest {
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void shouldGetAssociationFields() {
         Association association = new Association("Some Object");

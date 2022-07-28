@@ -64,12 +64,9 @@ class ForgettingMapTest {
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
         for (int i = 0; i < numberOfThreads; i++) {
             service.submit(() -> {
-                Random rand = new Random(); //instance of random class
-                int upperbound = 5;
-                int int_random = rand.nextInt(upperbound);
                 forgettingMap.addAssociation(numberOfThreads, new Association("Concurrent Value 1"));
                 forgettingMap.getAssociation(1);
-                forgettingMap.addAssociation(numberOfThreads + 100, new Association("Concurrent Value 2"));
+                forgettingMap.addAssociation(numberOfThreads + 1, new Association("Concurrent Value 2"));
                 latch.countDown();
             });
         }
@@ -81,7 +78,7 @@ class ForgettingMapTest {
 
     static Stream<Integer> shouldTestConcurrencyForGettingAndAddingAssociations() {
         return Stream.of(
-                1, 10, 20, 50, 100, 200);
+                1, 10, 20, 50, 100, 200, 500);
     }
 
 }
