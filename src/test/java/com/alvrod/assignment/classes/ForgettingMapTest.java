@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,12 +52,12 @@ class ForgettingMapTest {
 
     @MethodSource
     @ParameterizedTest(name = "{0}")
-    public void shouldTestConcurrencyForGettingAndAddingAssociations(int numberOfThreads) throws InterruptedException {
+    public void shouldTestGettingAndAddingAssociationsWithConcurrency(int numberOfThreads) throws InterruptedException {
         ForgettingMap forgettingMap = new ForgettingMap(3);
 
-        forgettingMap.addAssociation(0, new Association("SomeRandomValue"));
+        forgettingMap.addAssociation(0, new Association("Existing value 1"));
         forgettingMap.getAssociation(0);
-        forgettingMap.addAssociation(1, new Association("SomeRandomValue2"));
+        forgettingMap.addAssociation(1, new Association("Existing value 2"));
 
         ExecutorService service = Executors.newFixedThreadPool(10);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
@@ -71,14 +70,13 @@ class ForgettingMapTest {
             });
         }
         latch.await();
-        System.out.println(forgettingMap);
         assertEquals(3, forgettingMap.size());
         assertEquals(numberOfThreads, forgettingMap.get(1).getAccessCounter());
     }
 
-    static Stream<Integer> shouldTestConcurrencyForGettingAndAddingAssociations() {
+    static Stream<Integer> shouldTestGettingAndAddingAssociationsWithConcurrency() {
         return Stream.of(
-                1, 10, 20, 50, 100, 200, 500);
+                2, 10, 20, 50, 100, 200, 500);
     }
 
 }

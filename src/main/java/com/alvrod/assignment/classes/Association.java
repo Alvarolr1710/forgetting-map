@@ -4,8 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Association {
 
-    private Object content;
-    private AtomicInteger accessCounter = new AtomicInteger(0);
+    private final Object content;
+    private final AtomicInteger accessCounter = new AtomicInteger(0);
 
     public Association( Object content) {
         this.content = content;

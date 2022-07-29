@@ -11,13 +11,14 @@ public class ForgettingMap extends ConcurrentHashMap<Integer, Association> {
     }
 
     public void addAssociation(int key, Association association) {
-
         synchronized (this) {
-            if (super.mappingCount() >= maxSize) {
-                forgetLeastUsed();
-            }
+            super.computeIfAbsent(key, Association -> {
+                if (super.mappingCount() >= maxSize) {
+                    forgetLeastUsed();
+                }
+                return association;
+            });
         }
-        super.putIfAbsent(key, association);
     }
 
     private void forgetLeastUsed() {
@@ -33,6 +34,7 @@ public class ForgettingMap extends ConcurrentHashMap<Integer, Association> {
         if (Objects.nonNull(leastAccessed)) {
             super.remove(leastAccessedKey);
         }
+
     }
 
     public Association getAssociation(int key) {
